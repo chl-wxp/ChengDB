@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.apache.seatunnel</groupId>
+  <groupId>org.apache.chengdb</groupId>
   <artifactId>chengdb-ui</artifactId>
   <version>1.0-SNAPSHOT</version>
 
@@ -16,6 +16,11 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.apache.chengdb</groupId>
+      <artifactId>chengdb-server</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
     <!-- JFoenix module -->
     <dependency>
       <groupId>com.jfoenix</groupId>

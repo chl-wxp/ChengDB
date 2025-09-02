@@ -1,6 +1,6 @@
-package org.apache.chengdb.ui.service;
+package org.apache.chengdb.server.service;
 
-import org.apache.chengdb.ui.model.DatabaseConnection;
+import org.apache.chengdb.server.model.DatabaseConnection;
 import java.util.ArrayList;
 import java.util.List;
 

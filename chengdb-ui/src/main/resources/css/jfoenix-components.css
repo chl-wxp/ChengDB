@@ -421,3 +421,47 @@
 .database-icon {
     -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 1, 0, 0, 1);
 }
+
+/* 搜索框样式 */
+.search-field {
+    -fx-background-color: white;
+    -fx-border-color: #dee2e6;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 8 12;
+    -fx-font-size: 12px;
+    -fx-prompt-text-fill: #adb5bd;
+}
+
+.search-field:focused {
+    -fx-border-color: #007bff;
+    -fx-effect: dropshadow(one-pass-box, rgba(0, 123, 255, 0.25), 4, 0, 0, 0);
+}
+
+/* 搜索结果标签样式 */
+.search-result-label {
+    -fx-text-fill: #6c757d;
+    -fx-font-size: 10px;
+    -fx-padding: 4 0;
+}
+
+/* 连接树样式优化 */
+.connection-tree {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.connection-tree .tree-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #495057;
+    -fx-padding: 4 8;
+}
+
+.connection-tree .tree-cell:selected {
+    -fx-background-color: rgba(0, 123, 255, 0.1);
+    -fx-text-fill: #007bff;
+}
+
+.connection-tree .tree-cell:hover {
+    -fx-background-color: rgba(0, 123, 255, 0.05);
+}

@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.IkonResolver;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 
-public class ProductDemo extends Application {
+public class ChengDB extends Application {
 
     @FXMLViewFlowContext
     private ViewFlowContext flowContext;

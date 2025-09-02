@@ -12,12 +12,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import org.apache.chengdb.ui.model.DatabaseConnection;
-import org.apache.chengdb.ui.service.DatabaseService;
+import org.apache.chengdb.server.model.DatabaseConnection;
+import org.apache.chengdb.server.service.DatabaseService;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -37,6 +38,8 @@ public class DatabaseManagerController implements Initializable {
     @FXML private JFXButton restoreBtn;
     @FXML private Label statusLabel;
     @FXML private Label connectionStatusLabel;
+    @FXML private JFXTextField searchField;
+    @FXML private Label searchResultLabel;
 
     // 工具栏按钮
     @FXML private JFXButton toolbarNewConnectionBtn;
@@ -46,103 +49,135 @@ public class DatabaseManagerController implements Initializable {
     @FXML private JFXButton toolbarRestoreBtn;
     @FXML private JFXButton toolbarSettingsBtn;
 
+    // 存储原始连接列表用于搜索
+    private List<DatabaseConnection> allConnections = new ArrayList<>();
+    private TreeItem<DatabaseConnection> rootItem;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setupConnectionTree();
-        setupEventHandlers();
+        setupSearchFunctionality();
         loadConnectionsFromBackend();
         System.out.println("DatabaseManager初始化完成");
     }
 
-    public void init() {
-        // 初始化完成后的操作
+    private void setupSearchFunctionality() {
+        if (searchField != null) {
+            // 监听搜索框文本变化
+            searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+                filterConnections(newValue);
+            });
+
+            // 回车键搜索
+            searchField.setOnAction(e -> {
+                String searchText = searchField.getText();
+                if (searchText != null && !searchText.trim().isEmpty()) {
+                    searchAndHighlight(searchText.trim());
+                }
+            });
+
+            // 清空搜索框时恢复所有连接
+            searchField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue && searchField.getText().isEmpty()) {
+                    restoreAllConnections();
+                }
+            });
+        }
     }
 
-    private void setupConnectionTree() {
-        // 设置树的基本属性
-        connectionTree.setShowRoot(false);
-    }
+    private void filterConnections(String searchText) {
+        if (connectionTree == null || rootItem == null) return;
 
-    private void setupEventHandlers() {
-        // 导航栏按钮事件 - 添加空值检查
-        if (newConnectionBtn != null) {
-            newConnectionBtn.setOnAction(e -> openNewConnectionDialog());
-        }
-        if (queryBtn != null) {
-            queryBtn.setOnAction(e -> openQueryTab());
-        }
-        if (backupBtn != null) {
-            backupBtn.setOnAction(e -> openBackupDialog());
-        }
-        if (restoreBtn != null) {
-            restoreBtn.setOnAction(e -> openRestoreDialog());
+        if (searchText == null || searchText.trim().isEmpty()) {
+            // 搜索框为空时显示所有连接
+            restoreAllConnections();
+            hideSearchResult();
+            return;
         }
         
-        // 工具栏按钮事件 - 添加空值检查
-        if (toolbarNewConnectionBtn != null) {
-            toolbarNewConnectionBtn.setOnAction(e -> {
-                if (statusLabel != null) {
-                    statusLabel.setText("新建数据库连接...");
-                }
-                openNewConnectionDialog();
-            });
+        String lowerSearchText = searchText.toLowerCase();
+        List<DatabaseConnection> filteredConnections = new ArrayList<>();
+
+        // 过滤连接
+        for (DatabaseConnection connection : allConnections) {
+            if (connection.getName().toLowerCase().contains(lowerSearchText) ||
+                connection.getType().toLowerCase().contains(lowerSearchText) ||
+                connection.getHost().toLowerCase().contains(lowerSearchText)) {
+                filteredConnections.add(connection);
+            }
         }
 
-        if (toolbarExecuteBtn != null) {
-            toolbarExecuteBtn.setOnAction(e -> {
+        // 更新树显示
+        updateConnectionTree(filteredConnections);
+
+        // 显示搜索结果
+        showSearchResult(filteredConnections.size(), searchText);
+    }
+
+    private void searchAndHighlight(String searchText) {
+        if (connectionTree == null || rootItem == null) return;
+
+        String lowerSearchText = searchText.toLowerCase();
+
+        // 查找匹配的连接
+        for (TreeItem<DatabaseConnection> item : rootItem.getChildren()) {
+            DatabaseConnection connection = item.getValue();
+            if (connection.getName().toLowerCase().contains(lowerSearchText)) {
+                // 选中并展开到匹配项
+                connectionTree.getSelectionModel().select(item);
+                connectionTree.scrollTo(connectionTree.getRow(item));
+
+                // 更新状态
                 if (statusLabel != null) {
-                    statusLabel.setText("执行SQL查询...");
+                    statusLabel.setText("找到连接: " + connection.getName());
                 }
-                // TODO: 实现SQL执行功能
-            });
+                return;
+            }
         }
 
-        if (toolbarStopBtn != null) {
-            toolbarStopBtn.setOnAction(e -> {
-                if (statusLabel != null) {
-                    statusLabel.setText("停止当前操作...");
-                }
-                // TODO: 实现停止功能
-            });
+        // 没找到匹配项
+        if (statusLabel != null) {
+            statusLabel.setText("未找到匹配的连接: " + searchText);
+        }
+    }
+
+    private void restoreAllConnections() {
+        updateConnectionTree(allConnections);
+        hideSearchResult();
+    }
+
+    private void updateConnectionTree(List<DatabaseConnection> connections) {
+        if (connectionTree == null) return;
+
+        // 清空现有子节点
+        rootItem.getChildren().clear();
+
+        // 添加过滤后的连接
+        for (DatabaseConnection connection : connections) {
+            TreeItem<DatabaseConnection> connectionItem = new TreeItem<>(connection);
+
+            // 根据数据库类型设置图标
+            ImageView icon = createDatabaseIcon(connection.getType());
+            if (icon != null) {
+                connectionItem.setGraphic(icon);
+            }
+
+            rootItem.getChildren().add(connectionItem);
         }
 
-        if (toolbarBackupBtn != null) {
-            toolbarBackupBtn.setOnAction(e -> {
-                if (statusLabel != null) {
-                    statusLabel.setText("开始数据库备份...");
-                }
-                openBackupDialog();
-            });
-        }
+        // 展开根节点
+        rootItem.setExpanded(true);
+    }
 
-        if (toolbarRestoreBtn != null) {
-            toolbarRestoreBtn.setOnAction(e -> {
-                if (statusLabel != null) {
-                    statusLabel.setText("开始数据库恢复...");
-                }
-                openRestoreDialog();
-            });
+    private void showSearchResult(int count, String searchText) {
+        if (searchResultLabel != null) {
+            searchResultLabel.setText("找到 " + count + " 个匹配 \"" + searchText + "\" 的连接");
+            searchResultLabel.setVisible(true);
         }
+    }
 
-        if (toolbarSettingsBtn != null) {
-            toolbarSettingsBtn.setOnAction(e -> {
-                if (statusLabel != null) {
-                    statusLabel.setText("打开设置...");
-                }
-                // TODO: 实现设置功能
-            });
-        }
-
-        // 连接树双击事件
-        if (connectionTree != null) {
-            connectionTree.setOnMouseClicked(e -> {
-                if (e.getClickCount() == 2) {
-                    TreeItem<DatabaseConnection> selectedItem = connectionTree.getSelectionModel().getSelectedItem();
-                    if (selectedItem != null && selectedItem.getParent() != null) {
-                        openDatabaseTab(selectedItem.getValue().getName());
-                    }
-                }
-            });
+    private void hideSearchResult() {
+        if (searchResultLabel != null) {
+            searchResultLabel.setVisible(false);
         }
     }
 
@@ -150,10 +185,10 @@ public class DatabaseManagerController implements Initializable {
         // 异步加载连接列表
         Platform.runLater(() -> {
             try {
-                List<DatabaseConnection> connections = DatabaseService.getConnectionList();
-                buildConnectionTree(connections);
+                allConnections = DatabaseService.getConnectionList();
+                buildConnectionTree(allConnections);
                 if (statusLabel != null) {
-                    statusLabel.setText("已加载 " + connections.size() + " 个数据库连接");
+                    statusLabel.setText("已加载 " + allConnections.size() + " 个数据库连接");
                 }
             } catch (Exception e) {
                 System.err.println("加载连接列表失败: " + e.getMessage());
@@ -168,7 +203,7 @@ public class DatabaseManagerController implements Initializable {
         if (connectionTree == null) return;
 
         // 创建根节点
-        TreeItem<DatabaseConnection> rootItem = new TreeItem<>(new DatabaseConnection("数据库连接", "root", "", 0, "", ""));
+        rootItem = new TreeItem<>(new DatabaseConnection("数据库连接", "root", "", 0, "", ""));
         rootItem.setExpanded(true);
 
         // 为每个连接创建树节点
@@ -205,7 +240,6 @@ public class DatabaseManagerController implements Initializable {
                     // 默认数据库图标
                     return createFontIcon();
             }
-
             if (iconPath != null && getClass().getResource(iconPath) != null) {
                 ImageView imageView = new ImageView(new Image(getClass().getResourceAsStream(iconPath)));
                 imageView.setFitWidth(16);
@@ -216,7 +250,6 @@ public class DatabaseManagerController implements Initializable {
         } catch (Exception e) {
             System.err.println("加载数据库图标失败: " + e.getMessage());
         }
-
         // 如果图片加载失败，使用FontIcon作为备选
         return createFontIcon();
     }

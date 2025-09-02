@@ -5,10 +5,7 @@
    <artifactId>project</artifactId>
    <packaging>pom</packaging>
    <name>project</name>
-   <modules>
 
-       <module>chengdb-source-jdbc</module>
-   </modules>
    <build>
       <pluginManagement>
          <plugins>
