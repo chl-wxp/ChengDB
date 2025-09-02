@@ -71,15 +71,18 @@
                 </Menu>
             </MenuBar>
 
-            <!-- 工具栏 -->
+            <!-- 顶部工具栏 ：新建连接-执行-停止-备份-恢复 -->
             <HBox style="-fx-background-color: linear-gradient(to bottom, #ffffff, #f5f6fa); -fx-padding: 8 12; -fx-border-color: #e9ecef; -fx-border-width: 0 0 1 0;">
                 <spacing>8</spacing>
-
                 <JFXButton fx:id="toolbarNewConnectionBtn" contentDisplay="TOP" style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-padding: 8;">
                     <graphic>
-                        <FontIcon iconLiteral="fas-link" iconSize="16" style="-fx-icon-color: #28a745;"/>
+                        <ImageView fitWidth="30" fitHeight="30" preserveRatio="true">
+                            <image>
+                                <Image url="@/fonts/link.png"/>
+                            </image>
+                        </ImageView>
                     </graphic>
-                    <text>新建连接</text>
+                    <text>连接</text>
                 </JFXButton>
 
                 <Separator orientation="VERTICAL" style="-fx-background-color: #dee2e6;"/>
@@ -147,85 +150,7 @@
                 <VBox.margin>
                     <Insets top="8" bottom="16"/>
                 </VBox.margin>
-                <root>
-                    <TreeItem value="数据库连接" expanded="true">
-                        <children>
-                            <TreeItem value="MySQL - 本地">
-                                <graphic>
-                                    <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/fonts/mysql.png"/>
-                                        </image>
-                                    </ImageView>
-                                </graphic>
-                            </TreeItem>
-                            <TreeItem value="PostgreSQL - 测试">
-                                <graphic>
-                                    <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
-                                        <image>
-                                            <Image url="@/fonts/pgsql.png"/>
-                                        </image>
-                                    </ImageView>
-                                </graphic>
-                            </TreeItem>
-                        </children>
-                    </TreeItem>
-                </root>
             </JFXTreeView>
-            
-            <!-- 快速操作标题 -->
-            <HBox alignment="CENTER_LEFT" style="-fx-background-color: rgba(255,255,255,0.7); -fx-background-radius: 4; -fx-padding: 8;">
-                <FontIcon iconLiteral="fas-bolt" iconSize="14" style="-fx-icon-color: #495057;"/>
-                <Label text="  快速操作" style="-fx-text-fill: #495057; -fx-font-size: 13px; -fx-font-weight: bold;"/>
-            </HBox>
-            
-            <VBox spacing="2" style="-fx-padding: 8 0;">
-                <JFXButton fx:id="newConnectionBtn" alignment="CENTER_LEFT" prefWidth="256"
-                          style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-background-radius: 4; -fx-padding: 8 12;">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-database" iconSize="14" style="-fx-icon-color: #007bff;"/>
-                    </graphic>
-                    <text>  新建查询</text>
-                </JFXButton>
-                
-                <JFXButton fx:id="queryBtn" alignment="CENTER_LEFT" prefWidth="256"
-                          style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-background-radius: 4; -fx-padding: 8 12;">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-table" iconSize="14" style="-fx-icon-color: #6f42c1;"/>
-                    </graphic>
-                    <text>  表设计器</text>
-                </JFXButton>
-                
-                <JFXButton fx:id="backupBtn" alignment="CENTER_LEFT" prefWidth="256"
-                          style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-background-radius: 4; -fx-padding: 8 12;">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-file-excel" iconSize="14" style="-fx-icon-color: #fd7e14;"/>
-                    </graphic>
-                    <text>  数据传输</text>
-                </JFXButton>
-                
-                <JFXButton fx:id="restoreBtn" alignment="CENTER_LEFT" prefWidth="256"
-                          style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-background-radius: 4; -fx-padding: 8 12;">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-sync" iconSize="14" style="-fx-icon-color: #20c997;"/>
-                    </graphic>
-                    <text>  同步结构</text>
-                </JFXButton>
-
-                <Separator style="-fx-background-color: #dee2e6;">
-                    <VBox.margin>
-                        <Insets top="8" bottom="8"/>
-                    </VBox.margin>
-                </Separator>
-
-                <JFXButton alignment="CENTER_LEFT" prefWidth="256"
-                          style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-background-radius: 4; -fx-padding: 8 12;">
-                    <graphic>
-                        <FontIcon iconLiteral="fas-chart-line" iconSize="14" style="-fx-icon-color: #e83e8c;"/>
-                    </graphic>
-                    <text>  监控</text>
-                </JFXButton>
-            </VBox>
         </VBox>
     </left>
 
@@ -255,26 +180,42 @@
                                     <Label text="专业的数据库开发和管理工具" style="-fx-font-size: 16px; -fx-text-fill: #6c757d;"/>
                                 </VBox>
 
-                                <!-- 快速操作卡片 -->
-                                <HBox spacing="24" alignment="CENTER">
-                                    <VBox alignment="CENTER" spacing="12" style="-fx-background-color: #ffffff; -fx-padding: 24; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 2); -fx-border-color: #e9ecef; -fx-border-radius: 8; -fx-border-width: 1;">
-                                        <FontIcon iconLiteral="fas-link" iconSize="40" style="-fx-icon-color: #28a745;"/>
-                                        <Label text="新建连接" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #212529;"/>
-                                        <Label text="连接到数据库服务器" style="-fx-font-size: 12px; -fx-text-fill: #6c757d; -fx-text-alignment: center;"/>
-                                    </VBox>
+                                <!-- 快速操作按钮 -->
+                                <VBox spacing="4">
+                                    <Label text="快速操作" style="-fx-text-fill: #6c757d; -fx-font-size: 11px; -fx-font-weight: bold; -fx-padding: 0 0 4 0;"/>
 
-                                    <VBox alignment="CENTER" spacing="12" style="-fx-background-color: #ffffff; -fx-padding: 24; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 2); -fx-border-color: #e9ecef; -fx-border-radius: 8; -fx-border-width: 1;">
-                                        <FontIcon iconLiteral="fas-file" iconSize="40" style="-fx-icon-color: #007bff;"/>
-                                        <Label text="导入数据" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #212529;"/>
-                                        <Label text="从文件导入数据" style="-fx-font-size: 12px; -fx-text-fill: #6c757d; -fx-text-alignment: center;"/>
-                                    </VBox>
+                                    <JFXButton fx:id="newConnectionBtn" alignment="CENTER_LEFT" prefWidth="256"
+                                              style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-background-radius: 4; -fx-padding: 8 12;">
+                                        <graphic>
+                                            <FontIcon iconLiteral="fas-plus" iconSize="14" style="-fx-icon-color: #28a745;"/>
+                                        </graphic>
+                                        <text>  新建连接</text>
+                                    </JFXButton>
 
-                                    <VBox alignment="CENTER" spacing="12" style="-fx-background-color: #ffffff; -fx-padding: 24; -fx-background-radius: 8; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 8, 0, 0, 2); -fx-border-color: #e9ecef; -fx-border-radius: 8; -fx-border-width: 1;">
-                                        <FontIcon iconLiteral="fas-chart-bar" iconSize="40" style="-fx-icon-color: #fd7e14;"/>
-                                        <Label text="数据分析" style="-fx-font-weight: bold; -fx-font-size: 14px; -fx-text-fill: #212529;"/>
-                                        <Label text="查看数据统计信息" style="-fx-font-size: 12px; -fx-text-fill: #6c757d; -fx-text-alignment: center;"/>
-                                    </VBox>
-                                </HBox>
+                                    <JFXButton fx:id="queryBtn" alignment="CENTER_LEFT" prefWidth="256"
+                                              style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-background-radius: 4; -fx-padding: 8 12;">
+                                        <graphic>
+                                            <FontIcon iconLiteral="fas-search" iconSize="14" style="-fx-icon-color: #007bff;"/>
+                                        </graphic>
+                                        <text>  新建查询</text>
+                                    </JFXButton>
+
+                                    <JFXButton fx:id="backupBtn" alignment="CENTER_LEFT" prefWidth="256"
+                                              style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-background-radius: 4; -fx-padding: 8 12;">
+                                        <graphic>
+                                            <FontIcon iconLiteral="fas-download" iconSize="14" style="-fx-icon-color: #fd7e14;"/>
+                                        </graphic>
+                                        <text>  备份数据</text>
+                                    </JFXButton>
+
+                                    <JFXButton fx:id="restoreBtn" alignment="CENTER_LEFT" prefWidth="256"
+                                              style="-fx-text-fill: #495057; -fx-background-color: transparent; -fx-background-radius: 4; -fx-padding: 8 12;">
+                                        <graphic>
+                                            <FontIcon iconLiteral="fas-upload" iconSize="14" style="-fx-icon-color: #20c997;"/>
+                                        </graphic>
+                                        <text>  恢复数据</text>
+                                    </JFXButton>
+                                </VBox>
 
                                 <!-- 最近连接 -->
                                 <VBox spacing="16" style="-fx-max-width: 600;">
