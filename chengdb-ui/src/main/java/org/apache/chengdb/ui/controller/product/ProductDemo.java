@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.kordamp.ikonli.javafx.IkonResolver;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 
 public class ProductDemo extends Application {
 
@@ -18,28 +19,33 @@ public class ProductDemo extends Application {
     public void start(Stage primaryStage) throws Exception {
         // 确保图标库正确初始化
         try {
-            // 预加载FontAwesome图标
-            IkonResolver.getInstance();
+            IkonResolver.getInstance(); // 预加载图标库
+            FontAwesomeSolid.values();  // 强制加载FontAwesome
             System.out.println("图标库初始化成功");
         } catch (Exception e) {
             System.err.println("图标库初始化失败: " + e.getMessage());
         }
 
+        // Flow 容器
         Flow flow = new Flow(DatabaseManagerController.class);
         DefaultFlowContainer container = new DefaultFlowContainer();
         flowContext = new ViewFlowContext();
         flowContext.register("Stage", primaryStage);
         flow.createHandler(flowContext).start(container);
 
+        // 场景
         Scene scene = new Scene(container.getView(), 1200, 800);
 
-        // 加载样式表
+        // 样式表加载（保证路径正确）
         try {
-            scene.getStylesheets().add(getClass().getResource("/css/jfoenix-components.css").toExternalForm());
+            scene.getStylesheets().add(
+                    getClass().getResource("/css/jfoenix-components.css").toExternalForm()
+            );
+            System.out.println("样式表加载成功");
         } catch (Exception e) {
             System.err.println("样式表加载失败: " + e.getMessage());
         }
-        
+
         primaryStage.setTitle("ChengDB Manager");
         primaryStage.setScene(scene);
         primaryStage.show();

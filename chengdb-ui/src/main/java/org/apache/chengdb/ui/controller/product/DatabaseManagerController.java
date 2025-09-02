@@ -7,10 +7,7 @@ import io.datafx.controller.flow.context.ViewFlowContext;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
@@ -45,151 +42,16 @@ public class DatabaseManagerController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        setupConnectionTree();
         setupEventHandlers();
-        // 延迟设置图标，确保FXML完全加载
-        javafx.application.Platform.runLater(() -> {
-            setupIcons();
-            setupToolbarIcons();
-        });
+        // 不再需要手动设置图标，FXML中已经定义
     }
 
     public void init() {
         // 初始化完成后的操作
     }
 
-    private void setupIcons() {
-        // 手动设置图标，确保正确加载
-        try {
-            // 为导航栏按钮设置图标
-            setupNavigationIcons();
-
-            // 为按钮设置图标
-            if (newConnectionBtn.getGraphic() instanceof FontIcon) {
-                ((FontIcon) newConnectionBtn.getGraphic()).setIconCode(FontAwesomeSolid.DATABASE);
-            }
-            if (queryBtn.getGraphic() instanceof FontIcon) {
-                ((FontIcon) queryBtn.getGraphic()).setIconCode(FontAwesomeSolid.TABLE);
-            }
-            if (backupBtn.getGraphic() instanceof FontIcon) {
-                ((FontIcon) backupBtn.getGraphic()).setIconCode(FontAwesomeSolid.FILE_EXCEL);
-            }
-            if (restoreBtn.getGraphic() instanceof FontIcon) {
-                ((FontIcon) restoreBtn.getGraphic()).setIconCode(FontAwesomeSolid.SYNC);
-            }
-        } catch (Exception e) {
-            System.err.println("图标加载失败: " + e.getMessage());
-        }
-    }
-
-    private void setupNavigationIcons() {
-        // 为导航栏中的所有按钮重新设置图标
-        try {
-            // 查找导航栏中的所有按钮并设置图标
-            navigationPane.lookupAll(".jfx-button").forEach(node -> {
-                if (node instanceof JFXButton) {
-                    JFXButton button = (JFXButton) node;
-                    String buttonText = button.getText();
-
-                    if (buttonText != null) {
-                        FontIcon icon = null;
-                        switch (buttonText.trim()) {
-                            case "新建查询":
-                                icon = new FontIcon(FontAwesomeSolid.DATABASE);
-                                icon.setStyle("-fx-icon-color: #007bff;");
-                                break;
-                            case "表设计器":
-                                icon = new FontIcon(FontAwesomeSolid.TABLE);
-                                icon.setStyle("-fx-icon-color: #6f42c1;");
-                                break;
-                            case "数据传输":
-                                icon = new FontIcon(FontAwesomeSolid.FILE_EXCEL);
-                                icon.setStyle("-fx-icon-color: #fd7e14;");
-                                break;
-                            case "同步结构":
-                                icon = new FontIcon(FontAwesomeSolid.SYNC);
-                                icon.setStyle("-fx-icon-color: #20c997;");
-                                break;
-                            case "监控":
-                                icon = new FontIcon(FontAwesomeSolid.CHART_LINE);
-                                icon.setStyle("-fx-icon-color: #e83e8c;");
-                                break;
-                        }
-
-                        if (icon != null) {
-                            icon.setIconSize(14);
-                            button.setGraphic(icon);
-                        }
-                    }
-                }
-            });
-
-            // 设置标题区域的图标
-            setupTitleIcons();
-
-        } catch (Exception e) {
-            System.err.println("导航栏图标设置失败: " + e.getMessage());
-        }
-    }
-
-    private void setupTitleIcons() {
-        // 为标题区域设置图标
-        try {
-            navigationPane.lookupAll(".label").forEach(node -> {
-                if (node instanceof Label) {
-                    Label label = (Label) node;
-                    String labelText = label.getText();
-
-                    if ("  连接".equals(labelText)) {
-                        FontIcon serverIcon = new FontIcon(FontAwesomeSolid.SERVER);
-                        serverIcon.setStyle("-fx-icon-color: #495057;");
-                        serverIcon.setIconSize(14);
-                        // 将图标添加到HBox的第一个位置
-                        if (label.getParent() instanceof HBox) {
-                            HBox parent = (HBox) label.getParent();
-                            if (parent.getChildren().size() > 0 && parent.getChildren().get(0) instanceof FontIcon) {
-                                ((FontIcon) parent.getChildren().get(0)).setIconCode(FontAwesomeSolid.SERVER);
-                            }
-                        }
-                    } else if ("  快速操作".equals(labelText)) {
-                        if (label.getParent() instanceof HBox) {
-                            HBox parent = (HBox) label.getParent();
-                            if (parent.getChildren().size() > 0 && parent.getChildren().get(0) instanceof FontIcon) {
-                                ((FontIcon) parent.getChildren().get(0)).setIconCode(FontAwesomeSolid.BOLT);
-                            }
-                        }
-                    }
-                }
-            });
-        } catch (Exception e) {
-            System.err.println("标题图标设置失败: " + e.getMessage());
-        }
-    }
-
     private void setupConnectionTree() {
-        // 创建根节点
-        TreeItem<String> rootItem = new TreeItem<>("数据库连接");
-        rootItem.setExpanded(true);
-
-        // 添加示例连接，使用图片方式设置图标
-        TreeItem<String> mysqlConnection = new TreeItem<>("MySQL - 本地");
-        // 加载图片
-        Image mysqlImg = new Image(getClass().getResourceAsStream("/fonts/mysql.png"));
-        ImageView mysqlIcon = new ImageView(mysqlImg);
-        mysqlIcon.setFitWidth(16); // 调整大小
-        mysqlIcon.setFitHeight(16);
-        mysqlConnection.setGraphic(mysqlIcon);
-
-        // 添加 PostgreSQL 示例连接
-        TreeItem<String> postgresConnection = new TreeItem<>("PostgreSQL - 测试");
-        Image pgImg = new Image(getClass().getResourceAsStream("/fonts/pgsql.png"));
-        ImageView pgIcon = new ImageView(pgImg);
-        pgIcon.setFitWidth(16); // 调整图标大小
-        pgIcon.setFitHeight(16);
-        postgresConnection.setGraphic(pgIcon);
-
-        rootItem.getChildren().addAll(mysqlConnection, postgresConnection);
-        connectionTree.setRoot(rootItem);
+        // 由于FXML中已经定义了树结构，这里只需要设置基本属性
         connectionTree.setShowRoot(false);
     }
 

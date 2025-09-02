@@ -406,3 +406,18 @@
 .menu-item .graphic {
     -fx-padding: 0 8 0 0;
 }
+
+/* 确保FontAwesome字体正确加载 */
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('ikonli:fontawesome5');
+}
+
+.ikonli-font-icon {
+    -fx-font-family: 'FontAwesome';
+}
+
+/* 数据库图标样式 */
+.database-icon {
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.2), 1, 0, 0, 1);
+}

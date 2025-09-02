@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
@@ -146,6 +147,30 @@
                 <VBox.margin>
                     <Insets top="8" bottom="16"/>
                 </VBox.margin>
+                <root>
+                    <TreeItem value="数据库连接" expanded="true">
+                        <children>
+                            <TreeItem value="MySQL - 本地">
+                                <graphic>
+                                    <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/fonts/mysql.png"/>
+                                        </image>
+                                    </ImageView>
+                                </graphic>
+                            </TreeItem>
+                            <TreeItem value="PostgreSQL - 测试">
+                                <graphic>
+                                    <ImageView fitWidth="16" fitHeight="16" preserveRatio="true">
+                                        <image>
+                                            <Image url="@/fonts/pgsql.png"/>
+                                        </image>
+                                    </ImageView>
+                                </graphic>
+                            </TreeItem>
+                        </children>
+                    </TreeItem>
+                </root>
             </JFXTreeView>
             
             <!-- 快速操作标题 -->
