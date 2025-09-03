@@ -134,21 +134,16 @@
                 <Insets top="12" bottom="12" left="12" right="12"/>
             </padding>
             
-            <!-- 顶部搜索框 -->
-            <VBox spacing="8">
-                <JFXTextField fx:id="searchField" promptText="搜索连接..."
-                             style="-fx-background-color: white; -fx-border-color: #dee2e6; -fx-border-radius: 4; -fx-padding: 8;">
-                </JFXTextField>
+            <!-- 搜索框 -->
+            <JFXTextField fx:id="searchField" promptText="搜索连接..."
+                         style="-fx-background-color: white; -fx-border-color: #dee2e6; -fx-border-radius: 4 4 0 0; -fx-padding: 8;">
+            </JFXTextField>
 
-                <!-- 搜索结果提示 -->
-                <Label fx:id="searchResultLabel" text="" style="-fx-text-fill: #6c757d; -fx-font-size: 10px;" visible="false"/>
-            </VBox>
+            <!-- 搜索结果提示 -->
+            <Label fx:id="searchResultLabel" text="" style="-fx-text-fill: #6c757d; -fx-font-size: 10px; -fx-padding: 4 8;" visible="false"/>
 
             <!-- 连接列表 - 占据剩余空间 -->
-            <JFXTreeView fx:id="connectionTree" style="-fx-background-color: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
-                <VBox.margin>
-                    <Insets top="8"/>
-                </VBox.margin>
+            <JFXTreeView fx:id="connectionTree" style="-fx-background-color: white; -fx-border-color: #dee2e6; -fx-border-width: 0 1 1 1; -fx-border-radius: 0 0 4 4;" VBox.vgrow="ALWAYS">
             </JFXTreeView>
         </VBox>
     </left>
