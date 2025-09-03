@@ -134,29 +134,22 @@
                 <Insets top="12" bottom="12" left="12" right="12"/>
             </padding>
             
-            <!-- 连接树 - 占据剩余空间 -->
-            <JFXTreeView fx:id="connectionTree" style="-fx-background-color: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
-                <VBox.margin>
-                    <Insets top="8" bottom="8"/>
-                </VBox.margin>
-            </JFXTreeView>
-
-            <!-- 底部搜索框 -->
+            <!-- 顶部搜索框 -->
             <VBox spacing="8">
-                <VBox.margin>
-                    <Insets top="8"/>
-                </VBox.margin>
-
-                <JFXTextField fx:id="searchField" promptText="搜索..."
+                <JFXTextField fx:id="searchField" promptText="搜索连接..."
                              style="-fx-background-color: white; -fx-border-color: #dee2e6; -fx-border-radius: 4; -fx-padding: 8;">
-                    <VBox.margin>
-                        <Insets bottom="4"/>
-                    </VBox.margin>
                 </JFXTextField>
 
                 <!-- 搜索结果提示 -->
                 <Label fx:id="searchResultLabel" text="" style="-fx-text-fill: #6c757d; -fx-font-size: 10px;" visible="false"/>
             </VBox>
+
+            <!-- 连接列表 - 占据剩余空间 -->
+            <JFXTreeView fx:id="connectionTree" style="-fx-background-color: transparent; -fx-border-color: transparent;" VBox.vgrow="ALWAYS">
+                <VBox.margin>
+                    <Insets top="8"/>
+                </VBox.margin>
+            </JFXTreeView>
         </VBox>
     </left>
 

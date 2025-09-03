@@ -164,8 +164,7 @@ public class DatabaseManagerController implements Initializable {
             rootItem.getChildren().add(connectionItem);
         }
 
-        // 展开根节点
-        rootItem.setExpanded(true);
+        // 根节点已经隐藏，不需要手动展开
     }
 
     private void showSearchResult(int count, String searchText) {
@@ -202,8 +201,8 @@ public class DatabaseManagerController implements Initializable {
     private void buildConnectionTree(List<DatabaseConnection> connections) {
         if (connectionTree == null) return;
 
-        // 创建根节点
-        rootItem = new TreeItem<>(new DatabaseConnection("数据库连接", "root", "", 0, "", ""));
+        // 创建隐藏的根节点
+        rootItem = new TreeItem<>();
         rootItem.setExpanded(true);
 
         // 为每个连接创建树节点
@@ -220,6 +219,7 @@ public class DatabaseManagerController implements Initializable {
         }
 
         connectionTree.setRoot(rootItem);
+        connectionTree.setShowRoot(false); // 隐藏根节点
     }
 
     private ImageView createDatabaseIcon(String dbType) {
